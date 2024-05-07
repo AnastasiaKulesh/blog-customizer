@@ -8,7 +8,6 @@ import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 import {
 	fontFamilyOptions,
-	defaultArticleState,
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
@@ -21,11 +20,12 @@ import styles from './ArticleParamsForm.module.scss';
 
 type ArticleParamsFormProps = {
 	setArticleStyle: (value: ArticleStateType) => void;
+	articleState: ArticleStateType;
 };
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [isFormOpened, setIsFormOpened] = useState(false);
-	const [articleState, setArticleState] = useState(defaultArticleState);
+	const [articleState, setArticleState] = useState(props.articleState);
 
 	// Функция открытия/закрытия формы с настройками
 	const handleClickArrowButton = () => {
@@ -50,7 +50,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	// Функция сброса настроек на начальные
 	const handleReset = () => {
-		setArticleState(defaultArticleState);
+		setArticleState(props.articleState);
 	};
 
 	return (
