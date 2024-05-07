@@ -8,6 +8,7 @@ import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 import {
 	fontFamilyOptions,
+	defaultArticleState,
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
@@ -50,7 +51,8 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	// Функция сброса настроек на начальные
 	const handleReset = () => {
-		setArticleState(props.articleState);
+		setArticleState(defaultArticleState);
+		props.setArticleStyle(defaultArticleState);
 	};
 
 	return (
