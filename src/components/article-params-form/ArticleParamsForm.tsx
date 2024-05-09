@@ -1,6 +1,6 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { Text } from '../text';
 import { Select } from '../select';
@@ -22,11 +22,13 @@ import styles from './ArticleParamsForm.module.scss';
 type ArticleParamsFormProps = {
 	setArticleStyle: (value: ArticleStateType) => void;
 	articleState: ArticleStateType;
+	// ref: HTMLInputElement | null;
 };
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [isFormOpened, setIsFormOpened] = useState(false);
 	const [articleState, setArticleState] = useState(props.articleState);
+	const rootRef = useRef<HTMLElement | null>(null);
 
 	// Функция открытия/закрытия формы с настройками
 	const handleClickArrowButton = () => {
@@ -55,13 +57,30 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 		props.setArticleStyle(defaultArticleState);
 	};
 
+	// Функция закрытия формы через overlay
+	const closeFormOverlay = (e: MouseEvent) => {
+		if (e.target instanceof Node && !rootRef.current?.contains(e.target)) {
+			setIsFormOpened(false);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('mousedown', closeFormOverlay);
+		return () => {
+			console.log('useEffect return');
+			window.removeEventListener('mousedown', closeFormOverlay);
+		};
+	}, [isFormOpened]);
+
 	return (
+		// <div ref={rootRef}>
 		<>
 			<ArrowButton isPressed={isFormOpened} onClick={handleClickArrowButton} />
 			<aside
 				className={`${styles.container} ${
 					isFormOpened && styles.container_open
-				}`}>
+				}`}
+				ref={rootRef}>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmit}
@@ -108,5 +127,6 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 				</form>
 			</aside>
 		</>
+		/* </div> */
 	);
 };
