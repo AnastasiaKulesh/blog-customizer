@@ -22,13 +22,12 @@ import styles from './ArticleParamsForm.module.scss';
 type ArticleParamsFormProps = {
 	setArticleStyle: (value: ArticleStateType) => void;
 	articleState: ArticleStateType;
-	// ref: HTMLInputElement | null;
 };
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [isFormOpened, setIsFormOpened] = useState(false);
 	const [articleState, setArticleState] = useState(props.articleState);
-	const rootRef = useRef<HTMLElement | null>(null);
+	const rootRef = useRef<HTMLDivElement | null>(null);
 
 	// Функция открытия/закрытия формы с настройками
 	const handleClickArrowButton = () => {
@@ -65,22 +64,21 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	};
 
 	useEffect(() => {
+		if (!isFormOpened) return;
+
 		window.addEventListener('mousedown', closeFormOverlay);
 		return () => {
-			console.log('useEffect return');
 			window.removeEventListener('mousedown', closeFormOverlay);
 		};
 	}, [isFormOpened]);
 
 	return (
-		// <div ref={rootRef}>
-		<>
+		<div ref={rootRef}>
 			<ArrowButton isPressed={isFormOpened} onClick={handleClickArrowButton} />
 			<aside
 				className={`${styles.container} ${
 					isFormOpened && styles.container_open
-				}`}
-				ref={rootRef}>
+				}`}>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmit}
@@ -126,7 +124,6 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 					</div>
 				</form>
 			</aside>
-		</>
-		/* </div> */
+		</div>
 	);
 };
